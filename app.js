@@ -48,7 +48,7 @@ app.get("/api/products/:id", (req, res) => {
     });
 });
 
-app.post("/api/products", (req, res, next) => {
+app.post("/api/products", (req, res) => {
   const newProduct = new Product({
     name: req.body.name,
     description: req.body.description,
@@ -65,7 +65,7 @@ app.post("/api/products", (req, res, next) => {
     });
 });
 
-app.put("/api/products/:id", (req, res, next) => {
+app.put("/api/products/:id", (req, res) => {
   id = req.params.id;
   const productUpdates = new Product({
     _id: id,
