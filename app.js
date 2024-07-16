@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-const Thing = require("./models/thing");
+const Product = require("./models/product");
 
 const app = express();
 app.use(express.json());
@@ -29,31 +29,54 @@ app.use((req, res, next) => {
   next();
 });
 
-app.delete("/api/stuff/:id", (req, res) => {
+app.get("/api/products", (req, res, next) => {
+  Product.find()
+    .then((products) => {
+      res.status(200).json({ products });
+    })
+    .catch((error) => res.status(400).json({ error }));
+});
+
+app.get("/api/products/:id", (req, res) => {
   const id = req.params.id;
-  Thing.deleteOne({ _id: id })
-    .then(() => {
-      res.status(200).json({ message: "deleted Successfully" });
+  Product.findOne({ _id: id })
+    .then((product) => {
+      res.status(200).json({ product });
     })
     .catch((error) => {
-      res.status(400).json({ error });
+      res.status(404).json({ error });
     });
 });
 
-app.put("/api/stuff/:id", (req, res, next) => {
-  const updatedThing = new Thing({
-    _id: req.params.id,
-    title: req.body.title,
+app.post("/api/products", (req, res, next) => {
+  const newProduct = new Product({
+    name: req.body.name,
     description: req.body.description,
-    imageUrl: req.body.imageUrl,
     price: req.body.price,
-    userId: req.body.userId,
+    inStock: req.body.inStock,
   });
-  Thing.updateOne({ _id: req.params.id }, updatedThing)
+  newProduct
+    .save()
+    .then((product) => {
+      res.status(201).json({ product });
+    })
+    .catch((error) => {
+      res.status(400).json({ error: error });
+    });
+});
+
+app.put("/api/products/:id", (req, res, next) => {
+  id = req.params.id;
+  const productUpdates = new Product({
+    _id: id,
+    name: req.body.name,
+    description: req.body.description,
+    price: req.body.price,
+    inStock: req.body.inStock,
+  });
+  Product.updateOne({ _id: id }, productUpdates)
     .then(() => {
-      res.status(201).json({
-        message: "Thing updated successfully!",
-      });
+      res.status(201).json({ message: "Modified!" });
     })
     .catch((error) => {
       res.status(400).json({
@@ -62,42 +85,14 @@ app.put("/api/stuff/:id", (req, res, next) => {
     });
 });
 
-app.get("/api/stuff", (req, res, next) => {
-  Thing.find()
-    .then((things) => {
-      res.status(200).json(things);
-    })
-    .catch((error) => res.status(400).json({ error }));
-});
-
-app.get("/api/stuff/:id", (req, res) => {
+app.delete("/api/products/:id", (req, res) => {
   const id = req.params.id;
-  Thing.findOne({ _id: id })
-    .then((thing) => {
-      res.status(200).json(thing);
-    })
-    .catch((error) => {
-      res.status(404).json({ error });
-    });
-});
-
-app.post("/api/stuff", (req, res, next) => {
-  const newThing = new Thing({
-    title: req.body.title,
-    description: req.body.description,
-    imageUrl: req.body.imageUrl,
-    userId: req.body.userId,
-    price: req.body.price,
-  });
-  newThing
-    .save()
+  Product.deleteOne({ _id: id })
     .then(() => {
-      console.log("thing created successfully");
-      res.status(201).json({ newThing });
+      res.status(200).json({ message: "Deleted!" });
     })
     .catch((error) => {
-      res.status(400).json({ error: error });
+      res.status(400).json({ error });
     });
 });
-
 module.exports = app;
