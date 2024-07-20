@@ -1,20 +1,27 @@
 require("dotenv").config();
+const { connectUserDB } = require("./connections/usersDatabase");
+const { connectThingDB } = require("./connections/thingsDatabase");
+
+connectUserDB();
+connectThingDB();
+
 const express = require("express");
-const mongoose = require("mongoose");
+
 const bodyParser = require("body-parser");
+const stuffRoutes = require("./routes/stuff");
 const app = express();
-const stuffRoutes = require('./routes/stuff');
+
 app.use(express.json());
 
-mongoose
-  .connect(process.env.MONGOOSE_CONNECTION_STRING)
-  .then(() => {
-    console.log("Connected successfully to mongo");
-  })
-  .catch((error) => {
-    console.log("Unable to connect to mongo");
-    console.log(error);
-  });
+// mongoose
+//   .connect(process.env.MONGOOSE_CONNECTION_STRING)
+//   .then(() => {
+//     console.log("Connected successfully to mongo");
+//   })
+//   .catch((error) => {
+//     console.log("Unable to connect to mongo");
+//     console.log(error);
+//   });
 
 app.use(bodyParser.json());
 app.use(
@@ -36,6 +43,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/api/stuff', stuffRoutes)
+app.use("/api/stuff", stuffRoutes);
+
+const Controller = require("./controllers/user");
+app.use("/api/user", Controller.createUser);
 
 module.exports = app;
