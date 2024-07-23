@@ -1,6 +1,6 @@
 require("dotenv").config();
 const { connectUserDB } = require("./connections/usersDatabase");
-const { connectThingDB } = require("./connections/thingsDatabase");
+const { connectThingDB} = require("./connections/thingsDatabase");
 
 connectUserDB();
 connectThingDB();
@@ -45,7 +45,7 @@ app.use((req, res, next) => {
 
 app.use("/api/stuff", stuffRoutes);
 
-const Controller = require("./controllers/user");
-app.use("/api/user", Controller.createUser);
+const userRoutes = require('./routes/user');
+app.use("/api/user", userRoutes);
 
 module.exports = app;
