@@ -1,4 +1,6 @@
-const { default: mongoose } = require("mongoose");
+const  mongoose = require("mongoose");
+const thingDB = require("../connections/thingsDatabase");
+
 const thingSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
@@ -8,8 +10,5 @@ const thingSchema = new mongoose.Schema({
 });
 
 module.exports = {
-  Thing: mongoose.connections[parseInt(process.env.THINGDB_INDEX)].model(
-    "Thing",
-    thingSchema
-  ),
+  Thing: thingDB.model("Thing", thingSchema),
 };

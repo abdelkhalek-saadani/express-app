@@ -31,7 +31,7 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
-  console.log('login reached ! ');
+  
   User.findOne({ email: req.body.email })
     .then((user) => {
       if (!user) {
@@ -68,18 +68,4 @@ exports.login = (req, res, next) => {
     });
 };
 
-exports.createUser = (req, res, next) => {
-  const newUser = new User({
-    email: req.body.email,
-    password: req.body.password,
-  });
-  newUser
-    .save()
-    .then((user) => {
-      console.log("user created successfully");
-      res.status(201).json({ user });
-    })
-    .catch((error) => {
-      res.status(400).json({ error: error });
-    });
-};
+

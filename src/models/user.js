@@ -1,5 +1,7 @@
-const { default: mongoose } = require("mongoose");
-const uniqueValidator = require('mongoose-unique-validator');
+const mongoose = require("mongoose");
+const userDB = require("../connections/usersDatabase");
+
+const uniqueValidator = require("mongoose-unique-validator");
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -16,8 +18,5 @@ const userSchema = new mongoose.Schema({
 userSchema.plugin(uniqueValidator);
 
 module.exports = {
-  User: mongoose.connections[parseInt(process.env.USERDB_INDEX)].model(
-    "User",
-    userSchema
-  ),
+  User: userDB.model("User", userSchema),
 };
