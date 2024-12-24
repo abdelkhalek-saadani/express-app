@@ -18,7 +18,7 @@ exports.deleteOneThing = async (req, res) => {
 
 exports.updateOneThing = async (req, res, next) => {
   try {
-    const thing = JSON.parse(req.body.thing);
+    const thing = req.body;
     const userId = req.auth.userId;
     const url = req.protocol + "://" + req.get("host");
     const thingId = req.params.id;
