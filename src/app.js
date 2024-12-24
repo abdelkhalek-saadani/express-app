@@ -1,12 +1,10 @@
 
 const express = require("express");
-const multer = require("multer");
 
-const bodyParser = require("body-parser");  
 const app = express();
 const path = require('path');
-const upload = multer();
 const routes = require("./routes/index")
+const bodyParser = require("body-parser");
 
 
 
@@ -15,8 +13,6 @@ app.use(express.json());
 
 
 
-app.use(bodyParser.json());
-app.use(upload.none());
 
 app.use(
   bodyParser.urlencoded({
@@ -36,6 +32,7 @@ app.use((req, res, next) => {
   );
   next();
 });
+
 
 
 
