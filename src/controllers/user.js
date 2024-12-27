@@ -5,6 +5,9 @@ const userService = require("../services/userService");
 
 exports.signup = async (req, res, next) => {
   console.log("signup reached ! ");
+  console.log(req.body);
+  console.log(req.body.email);
+  console.log(req.body.password);
   try {
     const user = await userService.createUser(req.body.email, req.body.password);
     const token = userService.createToken({ userId:user._id});

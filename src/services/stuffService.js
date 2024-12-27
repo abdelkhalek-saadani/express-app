@@ -37,7 +37,7 @@ const deleteOneThing = async ({ thingId, userId }) => {
   const thing = await Thing.findOne({ _id: thingId });
 
   if (thing && thing.userId != userId) {
-    throw new Error("You're not permitted'to delete this item");
+    throw new Error("You're not permitted to delete this item");
   }
   const deleteState = await Thing.deleteOne({ _id: thingId });
   return deleteState;
